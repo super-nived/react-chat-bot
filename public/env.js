@@ -1,0 +1,7 @@
+// public/env.js
+window.env = {
+    VITE_APP_COLOR: "PLACEHOLDER_COLOR",
+    VITE_APP_MAIN_TEXT: "PLACEHOLDER_TEXT",
+    VITE_APP_API_URL: "PLACEHOLDER_API_URL"
+  };
+  

@@ -1,0 +1,27 @@
+.toaster {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: #28a745;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
+    font-size: 1rem;
+    z-index: 1000;
+    opacity: 0.9;
+    transition: all 0.5s ease;
+  }
+  
+  .toaster.error {
+    background-color: #dc3545;
+  }
+  
+  .toaster.info {
+    background-color: #17a2b8;
+  }
+  
+  .toaster p {
+    margin: 0;
+  }
+  
