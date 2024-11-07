@@ -19,27 +19,6 @@ const Main = ({ threadId: propThreadId }) => {
     }
   }, [propThreadId]);
 
-  // Load chat history from localStorage
-  useEffect(() => {
-    const savedChatHistory = localStorage.getItem('chat_history');
-    if (savedChatHistory) {
-      setResponseList(JSON.parse(savedChatHistory));
-    }
-  }, []);
-
-  // Save chat history to localStorage whenever it changes
-  useEffect(() => {
-    localStorage.setItem('chat_history', JSON.stringify(responseList));
-  }, [responseList]);
-
-  // Generate a chat context string to send to the server along with the new question
-  const generateChatContext = () => {
-    return responseList
-      .map(entry => `Q: ${entry.question}\nA: ${entry.response || '...'}`)
-      .reverse() // Reverse to send in chronological order
-      .join('\n');
-  };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -53,8 +32,7 @@ const Main = ({ threadId: propThreadId }) => {
 
     setLoading(true);
     const formData = new FormData();
-    const chatContext = generateChatContext(); // Get chat history for context
-    formData.append('chat_query', `${chatContext}\nQ: ${question}`);
+    formData.append('query', question);
     formData.append('thread_id', threadId);
 
     try {
@@ -85,10 +63,9 @@ const Main = ({ threadId: propThreadId }) => {
       });
     } finally {
       setLoading(false);
-      setQuestion(''); 
+      setQuestion(''); // Clear the input field after submission
     }
   };
-
 
   // Auto-scroll to bottom whenever the chat history is updated
   useEffect(() => {
@@ -129,6 +106,6 @@ const Main = ({ threadId: propThreadId }) => {
       </form>
     </div>
   );
-};        
+};
 
 export default Main;

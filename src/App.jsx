@@ -4,7 +4,7 @@ import Main from './components/Main';
 import './App.css';
 
 function App() {
-  const [threadId, setThreadId] = useState(localStorage.getItem('thread_id') || "thread_Xfo1ZgNMzCLZyLXLt9KUY1KK" ); // Initialize with localStorage value
+  const [threadId, setThreadId] = useState(localStorage.getItem('thread_id')); // Initialize with localStorage value
 
   return (
     <div className="app-container">
