@@ -8,7 +8,7 @@ function App() {
 
   return (
     <div className="app-container">
-      <Sidebar onThreadIdReceived={setThreadId} />
+      {/* <Sidebar onThreadIdReceived={setThreadId} /> */}
       <Main threadId={threadId} />
     </div>
   );

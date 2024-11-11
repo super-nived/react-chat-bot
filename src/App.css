@@ -11,7 +11,7 @@
   width: 100vw;
   background-color: #f0f0f0;
   display: grid;
-  grid-template-columns: 300px 1fr; /* Sidebar is fixed at 300px, rest fills the space */
+  grid-template-columns: 1fr; /* Sidebar is fixed at 300px, rest fills the space */
   overflow: hidden;
 }
 
@@ -114,6 +114,7 @@ button[type="submit"]:disabled {
   justify-content: flex-end;
   overflow: hidden;
   box-sizing: border-box;
+  width: 100%;
 }
 .main-content::-webkit-scrollbar{
   display: none;
@@ -129,6 +130,10 @@ button[type="submit"]:disabled {
   overflow-y: auto; /* To scroll through messages */
   max-height: calc(100vh - 120px); /* Reserve space for input */
   box-sizing: border-box;
+}
+
+.chat-history::-webkit-scrollbar{
+display: none;
 }
 
 /* Ensure the chat-entry does not overflow its container */

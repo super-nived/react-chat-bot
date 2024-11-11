@@ -44,7 +44,7 @@ const Main = ({ threadId: propThreadId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const currentQuestion = question.trim() || "Final result";
+    const currentQuestion = question.trim() ;
     if (!threadId) {
       alert('No thread ID found.');
       return;
@@ -108,7 +108,7 @@ const Main = ({ threadId: propThreadId }) => {
         const selectedAnswer = responseList[index].response;
 
         const feedbackData = {
-          threadId,
+          // threadId,
           questions: allQuestions,
           selectedAnswer: selectedAnswer,
         };
@@ -182,7 +182,7 @@ const Main = ({ threadId: propThreadId }) => {
                   className="like-button"
                   onClick={() => handleLike(index)}
                 >
-                  {entry.liked ? 'Unlike' : <FaThumbsUp />}
+                  {entry.liked ? 'Finalise' : <FaThumbsUp />}
                 </button>
               )}
             </div>
@@ -195,7 +195,7 @@ const Main = ({ threadId: propThreadId }) => {
           type="text"
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
-          placeholder="Ask a question about the PDF"
+          placeholder="Ask a question to select our products..."
           disabled={loading}
         />
         <button type="submit" disabled={loading || !question.trim()}>Ask</button>
