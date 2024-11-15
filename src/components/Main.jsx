@@ -4,6 +4,7 @@ import { FaSyncAlt, FaThumbsUp } from 'react-icons/fa';
 import { PiSealQuestionFill } from "react-icons/pi";
 import { AiOutlineCheckCircle } from "react-icons/ai"; // Example icon for "Final result"
 
+
 const Main = ({ threadId: propThreadId }) => {
   const [question, setQuestion] = useState('');
   const [responseList, setResponseList] = useState(() => {
@@ -13,6 +14,7 @@ const Main = ({ threadId: propThreadId }) => {
   const [loading, setLoading] = useState(false);
   const chatHistoryRef = useRef(null);
   const [sendingFeedback, setSendingFeedback] = useState(false);
+  const [questionSubmitted, setQuestionSubmitted] = useState(false); // New state for tracking question submission
 
   const [threadId, setThreadId] = useState(propThreadId || localStorage.getItem('thread_id'));
   const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
@@ -44,7 +46,7 @@ const Main = ({ threadId: propThreadId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const currentQuestion = question.trim() ;
+    const currentQuestion = question.trim();
     if (!threadId) {
       alert('No thread ID found.');
       return;
@@ -52,6 +54,8 @@ const Main = ({ threadId: propThreadId }) => {
 
     setResponseList(prev => [{ question: currentQuestion, response: null, liked: false }, ...prev]);
     setLoading(true);
+    setQuestionSubmitted(true); // Set question submitted to true
+    setQuestion(''); // Clear the input field after submission
     const formData = new FormData();
     const chatContext = generateChatContext();
     formData.append('chat_query', `${chatContext}\nQ: ${currentQuestion}`);
@@ -104,11 +108,12 @@ const Main = ({ threadId: propThreadId }) => {
       setSendingFeedback(true);
 
       try {
-        const allQuestions = responseList.map((entry) => entry.question);
+        const allQuestions  = responseList
+        .filter((entry) => entry.question !== "Final result")
+        .map((entry) => entry.question);
         const selectedAnswer = responseList[index].response;
 
         const feedbackData = {
-          // threadId,
           questions: allQuestions,
           selectedAnswer: selectedAnswer,
         };
@@ -124,7 +129,6 @@ const Main = ({ threadId: propThreadId }) => {
         if (res.ok) {
           console.log('Feedback sent successfully.');
 
-          // Add "Final result" entry without a like button
           const resultResponse = await res.json();
           setResponseList(prev => [{ question: "Final result", response: resultResponse.message, isFinalResult: true }, ...prev]);
         } else {
@@ -141,6 +145,7 @@ const Main = ({ threadId: propThreadId }) => {
 
   const handleClearChatHistory = () => {
     setResponseList([]);
+    setQuestionSubmitted(false); // Reset question submission status
     localStorage.removeItem('chat_history');
   };
 
@@ -149,21 +154,20 @@ const Main = ({ threadId: propThreadId }) => {
       <button
         onClick={handleClearChatHistory}
         className="clear-chat-button"
-        title="Clear Chat History"
-      >
-        <FaSyncAlt />
+        title="Clear Chat History">
+        clear chat
       </button>
 
       <div className="chat-history" ref={chatHistoryRef}>
-        {responseList.length === 0 ? (
-          <div className="chat-entry">
-            <p className="chat-question">Hello, how can I help you?</p>
+        {responseList.length === 0 && !questionSubmitted ? (
+          <div className="chat-entry-center" >
+            <p className="chat-question-center">What can I help you with?</p>
           </div>
         ) : (
           responseList.map((entry, index) => (
             <div key={index} className="chat-entry">
               <p className="chat-question">
-                {entry.isFinalResult ? <AiOutlineCheckCircle /> : <PiSealQuestionFill />} {/* Icon for "Final result" */}
+                {entry.isFinalResult ? <AiOutlineCheckCircle /> : <PiSealQuestionFill />}
                 {entry.question}
               </p>
               {entry.response ? (
@@ -176,7 +180,6 @@ const Main = ({ threadId: propThreadId }) => {
                   </div>
                 )
               )}
-              {/* Only show like button if it's not a "Final result" */}
               {entry.response && !entry.isFinalResult && (
                 <button
                   className="like-button"
